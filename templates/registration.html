@@ -1,0 +1,43 @@
+{{define "reg"}}
+
+{{template "header"}}
+
+<div class="container">
+    <div class="registration">
+        <form role="form" method="post" action="/createuser">
+            <div class="erros">
+                <ul>
+                    {{ range $val := . }}
+                        <li>{{$val }}</li>
+                    {{ end }}
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label>Login</label>
+                <input type="text" class="form-control" id="login" name="login"/>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" id="email" name="email"/>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" id="password" name="password"/>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm password</label>
+                <input type="password" class="form-control" id="confpassword" name="confpassword"/>
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+    </div>
+</div>
+
+{{template "footer"}}
+
+{{end}}

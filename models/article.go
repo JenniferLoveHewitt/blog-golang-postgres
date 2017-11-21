@@ -1,30 +1,29 @@
 package models
 
 import (
-	"github.com/rs/xid"
 	"time"
 )
 
 type Article struct {
-	Id         string `bson:"_id"`
-	Category   string
-	Title      string
-	Content    string
-	CreateDate string
+	Id       string
+	Category string
+	Title    string
+	Subtitle string
+	Content  string
+	Login    string
+	Created  time.Time
+	User_id  int
 }
 
-func NewArticle(category string, title string, content string) *Article {
-	runeTime := []rune(time.Now().String())
-
+func NewArticle(category string, title string, subtitle string, content string, login string) *Article {
 	return &Article{
-		genId(),
+		"nil",
 		category,
 		title,
+		subtitle,
 		content,
-		string(runeTime[0:19]),
+		login,
+		time.Now(),
+		0,
 	}
-}
-
-func genId() string {
-	return xid.New().String()
 }

@@ -10,8 +10,11 @@
 
         <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 article-body">
             <h1>{{.Title}}</h1>
-            <span>{{.CreateDate}}</span>
+            <h2>{{.Subtitle}}</h2>
+            <span>{{.Category}}</span>
+            <span>Posted by <a href="/users/{{.Id}}">{{.Login}}</a> on {{.Created}}</span>
             <p>{{.Content}}</p>
+            <span><a href="/delete/{{.Id}}">Delete</a></span>
         </div>
 
         <div class="col col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12">

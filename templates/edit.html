@@ -4,8 +4,8 @@
 
 <div class="container">
     <div class="editArticle">
-        <form role="form" method="post" action="/create">
-            <input type="hidden" name="Id" value="{{.Id}}">
+        <form role="form" method="post" action="/update">
+            <input type="hidden" name="id" value="{{.Id}}">
 
             <div class="form-group">
                 <label>Category</label>
@@ -17,9 +17,14 @@
                 <input type="text" class="form-control" id="title" name="title" value="{{.Title}}"/>
             </div>
 
+            <div class="form-group">
+                <label>Subtitle</label>
+                <input type="text" class="form-control" id="subtitle" name="subtitle" value="{{.Subtitle}}"/>
+            </div>
+
             <div class="form-group content">
                 <label>Content</label>
-                <textarea class="form-control" name="content" value="{{.Content}}"></textarea>
+                <textarea class="form-control" name="content" id="content" value="{{.Content}}"></textarea>
             </div>
 
             <input type="submit" class="btn btn-primary" value="Submit">

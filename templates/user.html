@@ -1,0 +1,41 @@
+{{define "user"}}
+
+{{template "header"}}
+
+<div class="container articles">
+
+    <h2>All the posts: </h2>
+
+    {{range $val := .}}
+
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-preview article">
+                <a href="/articles/{{$val.Id}}">
+                    <h3 class="post-title">
+                        {{$val.Title}}
+                    </h3>
+
+                    <h4 class="post-subtitle">
+                        {{$val.Category}}
+                    </h4>
+
+                    <h3 class="post-title">
+                        {{$val.Subtitle}}
+                    </h3>
+                </a>
+
+                <p class="post-meta">
+                    Posted by <a href="/users/{{$val.Login}}">{{$val.Login}}</a> on {{$val.Created}}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    {{end}}
+</div>
+
+{{template "footer"}}
+
+{{end}}

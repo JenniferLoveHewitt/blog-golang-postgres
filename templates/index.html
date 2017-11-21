@@ -7,23 +7,27 @@
 </div>
 
 <div class="container articles">
-{{range $key, $value := .}}
+{{range $val := .}}
 
 <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto">
         <div class="post-preview article">
-            <a href="/articles/{{$value.Id}}">
+            <a href="/articles/{{$val.Id}}">
                 <h2 class="post-title">
-                    {{$value.Title}}
+                    {{$val.Title}}
                 </h2>
 
                 <h3 class="post-subtitle">
-                    {{$value.Category}}
+                    {{$val.Category}}
                 </h3>
+
+                <h2 class="post-title">
+                    {{$val.Subtitle}}
+                </h2>
             </a>
 
             <p class="post-meta">
-                Posted by {{$value.CreateDate}}
+                Posted by <a href="/users/{{$val.Id}}">{{$val.Login}}</a> on {{$val.Created}}
             </p>
         </div>
     </div>
