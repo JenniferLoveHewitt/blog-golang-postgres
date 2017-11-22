@@ -63,3 +63,10 @@ footer p {
     font-size: 20px;
     padding-bottom: 30px;
 }
+
+.errors li {
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+    list-style-type: none;
+}

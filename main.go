@@ -24,9 +24,9 @@ var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(32))
 
 const (
-	DB_USER     = "user"
-	DB_PASSWORD = "pswrd"
-	DB_NAME     = "dbname"
+	DB_USER     = "iml"
+	DB_PASSWORD = "fullclip741"
+	DB_NAME     = "blogdb3"
 )
 
 func main() {
@@ -64,7 +64,7 @@ func main() {
 	router.HandleFunc("/login", loginHandler)
 	router.HandleFunc("/auth", postLoginHandler).Methods("POST")
 
-	router.HandleFunc("/logout", logoutHandler).Methods("POST")
+	router.HandleFunc("/logout", logoutHandler)
 
 	router.HandleFunc("/account", accountHandler).Methods("GET")
 
@@ -265,6 +265,11 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registrationHandler(w http.ResponseWriter, r *http.Request) {
+	if login, _ := getUserInfo(r); login != "" {
+		http.Redirect(w, r, "/account", 302)
+		return
+	}
+
 	t, err := template.ParseFiles("templates/registration.html",
 		"templates/header.html",
 		"templates/footer.html")
@@ -348,9 +353,19 @@ func userInfoHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	if login, _ := getUserInfo(r); login != "" {
+		http.Redirect(w, r, "/account", 302)
+		return
+	}
+
 	t, err := template.ParseFiles("templates/login.html",
 		"templates/header.html",
 		"templates/footer.html")
+
+	if login, _ := getUserInfo(r); login != "" {
+		accountHandler(w, r)
+		return
+	}
 
 	PanicOnErr(err)
 
@@ -373,7 +388,7 @@ func postLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	errs := make([]string, 0)
 	if password != user.Password {
-		errs = append(errs, "Неправильный логин или пароль1")
+		errs = append(errs, "Неправильный логин или пароль")
 	} else if row == nil {
 		errs = append(errs, "Неправильный логин или пароль")
 	}
@@ -394,7 +409,7 @@ func postLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	clearSession(w)
-	http.Redirect(w, r, "/", 302)
+	http.Redirect(w, r, "/account", 302)
 }
 
 func accountHandler(w http.ResponseWriter, r *http.Request) {
@@ -405,10 +420,6 @@ func accountHandler(w http.ResponseWriter, r *http.Request) {
 	PanicOnErr(err)
 
 	login, _ := getUserInfo(r)
-
-	if login == "" {
-		login = "you arent authorized"
-	}
 
 	t.ExecuteTemplate(w, "account", login)
 }

@@ -9,7 +9,19 @@
         </div>
 
         <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 article-body">
-            <h1>Hello, {{.}}</h1>
+            {{if .}}
+                <h1>Hello, {{.}}</h1>
+
+                <div>
+                    <a href="/logout"><button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-right: 20px">Log out</button></a>
+                </div>
+            {{else}}
+                <h1>You arent authorized</h1>
+
+                <div>
+                    <a href="/login"><button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-right: 20px">Log in</button></a>
+                </div>
+            {{end}}
         </div>
 
         <div class="col col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12">
