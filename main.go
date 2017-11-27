@@ -23,10 +23,11 @@ var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(64),
 	securecookie.GenerateRandomKey(32))
 
+//формируем строку подлключения к бд
 const (
-	DB_USER     = "iml"
-	DB_PASSWORD = "fullclip741"
-	DB_NAME     = "blogdb3"
+	DB_USER     = "user"
+	DB_PASSWORD = "password"
+	DB_NAME     = "dbname"
 )
 
 func main() {
@@ -71,6 +72,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":3001", router))
 }
 
+//отображение всех созданных статей из бд
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/index.html",
 		"templates/header.html",
@@ -82,6 +84,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer rows.Close()
 
+	//создаем слайс для записи всех статей
 	articles := make([]*models.Article, 0)
 
 	for rows.Next() {
@@ -97,6 +100,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 		PanicOnErr(err)
 
+		//узнаем логин пользователя по айди
 		db.QueryRow("SELECT login FROM userinfo WHERE uid = $1", article.User_id).Scan(&article.Login)
 
 		articles = append(articles, article)
@@ -138,8 +142,10 @@ func newHandler(w http.ResponseWriter, r *http.Request) {
 
 	PanicOnErr(err)
 
+	//получаем данные из сессии
 	login, _ := getUserInfo(r)
 
+	//если пользователь не авторизирован, переадресуем на панель авторизации
 	if login == "" {
 		loginHandler(w, r)
 		return
@@ -179,6 +185,8 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	db.QueryRow("SELECT uid FROM userinfo WHERE login = $1", login).Scan(&uid)
 	db.QueryRow("SELECT user_uid FROM articles WHERE uid = $1", id).Scan(&user_id)
 
+	//удалить статью может тот, кто ее создал
+	//если пользователь не авторизован или не создатель создатель переадресуем его
 	if uid == 0 || user_id != uid {
 		http.Redirect(w, r, "/", 302)
 		return
@@ -424,6 +432,7 @@ func accountHandler(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "account", login)
 }
 
+//создаем куку с значениями логин и роль
 func setSession(login string, role string, w http.ResponseWriter) {
 	value := map[string]string{
 		"login": login,
@@ -451,6 +460,7 @@ func clearSession(w http.ResponseWriter) {
 	http.SetCookie(w, cookie)
 }
 
+//узнаем логин и роль пользоваеля по куки
 func getUserInfo(r *http.Request) (login string, role string) {
 	if cookie, err := r.Cookie("session"); err == nil {
 		cookieValue := make(map[string]string)
